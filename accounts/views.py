@@ -3,7 +3,7 @@ import sys
 from django.shortcuts import redirect, render
 from django.core.mail import send_mail
 from accounts.models import Token
-from django.contrib.auth import authenticate
+from accounts.authentication import PasswordlessAuthenticationBackend
 from django.contrib.auth import login as auth_login, logout as auth_logout
 
 
@@ -25,7 +25,7 @@ def send_login_email(request):
 def login(request):
     print('login view', file=sys.stderr)
     uid = request.GET.get('uid')
-    user = authenticate(uid=uid)
+    user = PasswordlessAuthenticationBackend().authenticate(uid=uid)
     if user is not None:
         auth_login(request, user)
     return redirect('/')
