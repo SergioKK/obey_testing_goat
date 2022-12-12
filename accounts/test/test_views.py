@@ -1,3 +1,5 @@
+from unittest import skip
+
 from django.test import TestCase
 from unittest.mock import patch, call
 
@@ -56,10 +58,10 @@ class SendLoginEmailViewTest(TestCase):
 
 @patch('accounts.views.auth')
 class LoginViewTest(TestCase):
-    def test_redirects_to_home_page(self,mock_auth):
+
+    def test_redirects_to_home_page(self, mock_auth):
         response = self.client.get('/accounts/login?token=abcd123')
         self.assertRedirects(response, '/')
-
 
     def test_calls_authenticate_with_uid_from_get_request(self, mock_auth):
         self.client.get('/accounts/login?token=abcd123')

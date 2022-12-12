@@ -1,11 +1,12 @@
 from accounts.models import User, Token
+from django.contrib.auth.backends import ModelBackend
 
 
-class PasswordlessAuthenticationBackend(object):
+class PasswordlessAuthenticationBackend(ModelBackend):
 
-    def authenticate(self, uid):
+    def authenticate(self, request, **kwargs):
         try:
-            token = Token.objects.get(uid=uid)
+            token = Token.objects.get(uid=kwargs['uid'])
             return User.objects.get(email=token.email)
         except User.DoesNotExist:
             return User.objects.create(email=token.email)
